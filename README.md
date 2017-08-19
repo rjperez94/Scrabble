@@ -19,3 +19,4 @@
 ## Running the program
 
 1. Right click on your `Java Project` --> `Run As` --> `Java Application` --> `Scrabble Solitaire`
+2. `Commit` makes the tile placements permamnent
