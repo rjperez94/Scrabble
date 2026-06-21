@@ -17,49 +17,46 @@ Qx1, Zx1                                            10 points
 
 public class Bag {
     private ArrayList <Tile> tiles = new ArrayList <Tile>();
-    private final Random random = new Random ();
-    private final File path;
-    
-    public Bag (RuntimeDetector.TargetEnv env, File path) {
-        this.path = path;
-        
-        reset ();
+    private Random random = new Random ();
+
+    public Bag (File tilesDir) {
+        reset (tilesDir);
     }
 
-    public void reset () {
+    public void reset (File tilesDir) {
         tiles = new ArrayList <Tile>();
-        addTiles (2, "blank", 0);
-        addTiles (12, "E", 1);
-        addTiles (9, "A", 1);
-        addTiles (9, "I", 1);
-        addTiles (8, "O", 1);
-        addTiles (6, "N", 1);
-        addTiles (6, "R", 1);
-        addTiles (6, "T", 1);
-        addTiles (4, "L", 1);
-        addTiles (4, "S", 1);
-        addTiles (4, "U", 1);
-        addTiles (4, "D", 2);
-        addTiles (3, "G", 2);
-        addTiles (2, "B", 3);
-        addTiles (2, "C", 3);
-        addTiles (2, "M", 3);
-        addTiles (2, "P", 3);
-        addTiles (2, "F", 4);
-        addTiles (2, "H", 4);
-        addTiles (2, "V", 4);
-        addTiles (2, "W", 4);
-        addTiles (2, "Y", 4);
-        addTiles (1, "K", 5);
-        addTiles (1, "J", 8);
-        addTiles (1, "X", 8);
-        addTiles (1, "Q", 10);
-        addTiles (1, "Z", 10);        
+        addTiles (tilesDir, 2, "blank", 0);
+        addTiles (tilesDir, 12, "E", 1);
+        addTiles (tilesDir, 9, "A", 1);
+        addTiles (tilesDir, 9, "I", 1);
+        addTiles (tilesDir, 8, "O", 1);
+        addTiles (tilesDir, 6, "N", 1);
+        addTiles (tilesDir, 6, "R", 1);
+        addTiles (tilesDir, 6, "T", 1);
+        addTiles (tilesDir, 4, "L", 1);
+        addTiles (tilesDir, 4, "S", 1);
+        addTiles (tilesDir, 4, "U", 1);
+        addTiles (tilesDir, 4, "D", 2);
+        addTiles (tilesDir, 3, "G", 2);
+        addTiles (tilesDir, 2, "B", 3);
+        addTiles (tilesDir, 2, "C", 3);
+        addTiles (tilesDir, 2, "M", 3);
+        addTiles (tilesDir, 2, "P", 3);
+        addTiles (tilesDir, 2, "F", 4);
+        addTiles (tilesDir, 2, "H", 4);
+        addTiles (tilesDir, 2, "V", 4);
+        addTiles (tilesDir, 2, "W", 4);
+        addTiles (tilesDir, 2, "Y", 4);
+        addTiles (tilesDir, 1, "K", 5);
+        addTiles (tilesDir, 1, "J", 8);
+        addTiles (tilesDir, 1, "X", 8);
+        addTiles (tilesDir, 1, "Q", 10);
+        addTiles (tilesDir, 1, "Z", 10);
     }
 
-    private void addTiles (int count, String name, int score) {
+    private void addTiles (File tilesDir, int count, String name, int score) {
         for (int i=0; i<count; i++) {
-            tiles.add(new Tile(this.path, name,score));
+            tiles.add(new Tile(tilesDir, name, score));
         }
     }
 
