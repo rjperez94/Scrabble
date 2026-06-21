@@ -229,7 +229,7 @@ public class Board{
      * Draw the board.
      * Assumes that the graphics pane has been cleared
      */
-    public void draw() throws IOException {
+    public void draw() {
         /*# YOUR CODE HERE */
 
         double y = Top;

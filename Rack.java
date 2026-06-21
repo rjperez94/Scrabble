@@ -87,7 +87,7 @@ public class Rack{
         }
     }
 
-    public void draw() throws IOException {
+    public void draw() {
         UI.setColor(Color.black);
         int left = Left;
         for(int pos = 0; pos<RackSize; pos++){
