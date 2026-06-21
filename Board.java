@@ -1,5 +1,6 @@
 import ecs100.*;
 import java.awt.Color;
+import java.io.IOException;
 
 /**
 Scrabble Board
@@ -228,7 +229,7 @@ public class Board{
      * Draw the board.
      * Assumes that the graphics pane has been cleared
      */
-    public void draw(){
+    public void draw() throws IOException {
         /*# YOUR CODE HERE */
 
         double y = Top;

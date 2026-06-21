@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.*;
 
 /**
@@ -14,11 +15,14 @@ Jx1, Xx1                                            8 points
 Qx1, Zx1                                            10 points
  */
 
-public class Bag{
+public class Bag {
     private ArrayList <Tile> tiles = new ArrayList <Tile>();
-    private Random random = new Random ();
-
-    public Bag () {
+    private final Random random = new Random ();
+    private final File path;
+    
+    public Bag (RuntimeDetector.TargetEnv env, File path) {
+        this.path = path;
+        
         reset ();
     }
 
@@ -55,7 +59,7 @@ public class Bag{
 
     private void addTiles (int count, String name, int score) {
         for (int i=0; i<count; i++) {
-            tiles.add(new Tile(name,score));
+            tiles.add(new Tile(this.path, name,score));
         }
     }
 

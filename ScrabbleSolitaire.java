@@ -1,5 +1,9 @@
 import ecs100.*;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+
 /** Lets a user play a solitaire game of Scrabble.
 Scrabble is a word game in which players take turns at adding words to
 a crossword by placing tiles on a board. Each tile has a letter and a score.
@@ -41,11 +45,16 @@ committed, and will refill the rack from the bag (as long as there are tiles in 
  */
 
 public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButtonListener{
+    // Load required elements tiles directory using a JFileChooser
+    private RuntimeDetector.TargetEnv ENV = RuntimeDetector.getEnvironment();
+    private JFileChooser fileChooser = new JFileChooser();
+    private final String TILE_A = "A.jpg";
+    private File TILES_PATH;
 
     // fields to hold the bag, rack and board, and the tile in the hand
-    private Bag bag = new Bag ();
-    private Rack rack = new Rack ();
-    private Board board = new Board ();
+    private Bag bag;
+    private Rack rack;
+    private Board board;
     private Tile hand;
     
     private static final int handX = 5;
@@ -54,7 +63,13 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
     /**
      * Set up the GUI (buttons and mouse listener) and restart the game
      */
-    public ScrabbleSolitaire(){
+    public ScrabbleSolitaire() throws IOException {
+        chooseDir();
+
+        bag = new Bag (ENV,TILES_PATH);
+        rack = new Rack ();
+        board = new Board ();
+
         UI.setImmediateRepaint(false);
         UI.addButton("Restart", this);
         UI.addButton("Commit", this);
@@ -63,12 +78,50 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
     }
 
     /**
+     * Choose directory where the tiles are
+     */
+    private void chooseDir() {
+        if (ENV != RuntimeDetector.TargetEnv.CHEERPJ_BROWSER) {
+            File test = null;
+
+            // set up the file chooser
+            fileChooser.setCurrentDirectory(new File("."));
+            fileChooser.setDialogTitle("Select input directory");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            // run the file chooser and check the user didn't hit cancel
+            if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                // get the files in the selected directory and match them to
+                // the files we need.
+                File directory = fileChooser.getSelectedFile();
+                File[] files = directory.listFiles();
+
+                for (File f : files) {
+                    if (f.getName().equals(TILE_A)) {
+                        test = f;
+                    }
+                }
+
+                // check none of the files are missing, and call the load
+                // method in your code.
+                if (test == null) {
+                    JOptionPane.showMessageDialog(null, "Directory does not contain correct files", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                } else {
+                    TILES_PATH = test.getParentFile();    //  Set dir for the tile images
+                }
+            }
+        }
+    }
+
+    /**
      * User can drag a tile from the board or the rack to a space on the board or the rack.
      * The user can also drag a tile from the board or rack to a full place on the rack if the
      *    tiles on the rack could be shifted up or down to make space for it.
      *  If the mouse is pressed on a tile in the rack and released and redraw
      */
-    public void mousePerformed(String action, double x, double y){
+    public void mousePerformed(String action, double x, double y) {
         if (action.equals("pressed") && hand == null){
             if (rack.on (x,y)) {
                 int index = rack.index(x,y);
@@ -90,7 +143,11 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
                 }
             }
         }
-        draw();
+        try {
+            draw();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         UI.printMessage("");
     }
 
@@ -100,7 +157,11 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
     public void buttonPerformed(String button){
         UI.printMessage("");
         if (button.equals("Restart")){
-            restart();
+            try {
+                restart();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         else if (button.equals("Commit")){
             if (hand != null) {UI.printMessage("Can't commit while holding a tile");}
@@ -110,7 +171,11 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
                 rack.fill (bag);
             }
         }
-        draw();
+        try {
+            draw();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /** Restart the game:
@@ -119,7 +184,7 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
      * set the bag to be empty, and then read the file of tile names into the bag
      * (keeping track of bagCount)
      */
-    public void restart(){
+    public void restart() throws IOException {
         board.reset();
         bag.reset();
         rack.reset();
@@ -130,7 +195,7 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
     /**
      * Draw the board, rack, and hand
      */
-    public void draw(){
+    public void draw() throws IOException {
         UI.clearGraphics();
         board.draw();
         rack.draw ();
@@ -140,7 +205,7 @@ public class ScrabbleSolitaire extends Board implements UIMouseListener, UIButto
         UI.repaintGraphics();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         new ScrabbleSolitaire();
     }        
 

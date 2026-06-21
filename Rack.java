@@ -1,5 +1,6 @@
 import ecs100.*;
 import java.awt.Color;
+import java.io.IOException;
 
 /**    
 The rack is represented by an array of tiles.
@@ -86,7 +87,7 @@ public class Rack{
         }
     }
 
-    public void draw() {
+    public void draw() throws IOException {
         UI.setColor(Color.black);
         int left = Left;
         for(int pos = 0; pos<RackSize; pos++){
